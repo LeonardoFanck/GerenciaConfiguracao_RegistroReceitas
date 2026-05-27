@@ -16,7 +16,7 @@ public class AutenticacaoController(RegistroReceitasContext context) : Controlle
     public async Task<IActionResult> Login(LoginViewModel model)
     {
         if (!ModelState.IsValid)
-            return View(model); // leonardo
+            return View(model); // leonardo teste novo
 
         var usuario = await _context.Usuario
             .FirstOrDefaultAsync(u => u.Login == model.Login);
