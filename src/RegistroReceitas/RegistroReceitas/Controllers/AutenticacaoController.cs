@@ -5,6 +5,8 @@ using RegistroReceitas.ViewModel;
 
 namespace RegistroReceitas.Controllers;
 
+//testes
+
 public class AutenticacaoController(RegistroReceitasContext context) : Controller
 {
     private readonly RegistroReceitasContext _context = context;
