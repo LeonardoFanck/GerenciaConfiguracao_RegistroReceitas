@@ -12,7 +12,8 @@ on:
 jobs:
 
   build-test:
-
+    name: Build e Testes Homolog
+    
     runs-on: ubuntu-latest
 
     steps:
