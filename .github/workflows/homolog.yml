@@ -1,4 +1,4 @@
-name: hHmologação Pipeline
+name: Hmologação Pipeline
 
 on:
   push:
@@ -26,10 +26,10 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Restaurar dependências
-        run: dotnet restore
+        run: dotnet restore src/RegistroReceitas
 
       - name: Build projeto
-        run: dotnet build --no-restore
+        run: dotnet build src/RegistroReceitas --no-restore
 
       - name: Executar testes
-        run: dotnet test --no-build
+        run: dotnet test src/RegistroReceitas --no-build
