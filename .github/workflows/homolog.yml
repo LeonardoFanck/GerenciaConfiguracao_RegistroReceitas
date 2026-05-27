@@ -1,13 +1,13 @@
-name: Hmologação Pipeline
+name: Homologação Pipeline
 
 on:
   push:
     branches:
-      - homologação
+      - homologacao
 
   pull_request:
     branches:
-      - homologação
+      - homologacao
 
 jobs:
 
