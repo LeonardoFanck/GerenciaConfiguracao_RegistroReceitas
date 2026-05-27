@@ -1,8 +1,8 @@
 services:
+
   postgres:
     image: postgres:16
     container_name: postgres_registro_receitas
-    restart: always
 
     environment:
       POSTGRES_DB: registro_receitas
@@ -14,6 +14,22 @@ services:
 
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: ../../src/RegistroReceitas
+      dockerfile: Dockerfile
+
+    container_name: app_registro_receitas
+
+    depends_on:
+      - postgres
+
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+
+    ports:
+      - "8080:8080"
 
 volumes:
   postgres_data:
