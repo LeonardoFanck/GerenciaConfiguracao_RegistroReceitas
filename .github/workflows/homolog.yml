@@ -1,4 +1,4 @@
-name: Hmologação Pipeline
+name: Homologação Pipeline
 
 on:
   push:
