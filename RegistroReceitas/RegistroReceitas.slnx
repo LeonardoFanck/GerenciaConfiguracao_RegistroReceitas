@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="RegistroReceitas.Tests/RegistroReceitas.Tests.csproj" Id="3224f9ba-420c-490a-996f-0b97fc57bea5" />
+  <Project Path="RegistroReceitas/RegistroReceitas.csproj" />
+</Solution>

@@ -1,0 +1,113 @@
+﻿@model IEnumerable<RegistroReceitas.Models.Receita>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<form method="get" class="row mb-3">
+
+    <div class="col-md-3">
+        <label>Data Início</label>
+        <input type="date"
+               name="dataInicio"
+               class="form-control"
+               value="@Context.Request.Query["dataInicio"]" />
+    </div>
+
+    <div class="col-md-3">
+        <label>Data Fim</label>
+        <input type="date"
+               name="dataFim"
+               class="form-control"
+               value="@Context.Request.Query["dataFim"]" />
+    </div>
+
+    <div class="col-md-3">
+        <label>Tipo Receita</label>
+
+        <select name="tipoReceita" class="form-select">
+            <option value="">Todos</option>
+
+            @foreach (var tipo in ViewBag.TiposReceitas)
+            {
+                <!option value="@tipo" @(Context.Request.Query["tipoReceita"].ToString() == tipo.ToString() ? "selected" : "")>
+                    @tipo
+                </!option>
+            }
+        </select>
+    </div>
+
+    <div class="col-md-3 d-flex align-items-end gap-2">
+
+        <button type="submit" class="btn btn-primary">
+            Filtrar
+        </button>
+
+        <a asp-controller="Relatorio"
+               asp-action="Visualizar"
+               asp-route-dataInicio="@Context.Request.Query["dataInicio"]"
+               asp-route-dataFim="@Context.Request.Query["dataFim"]"
+               asp-route-tipoReceita="@Context.Request.Query["tipoReceita"]"
+               target="_blank"
+               class="btn btn-danger">
+            Exportar PDF
+        </a>
+
+    </div>
+
+</form>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descricao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataRegistro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Custo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoReceita)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descricao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataRegistro)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Custo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipoReceita)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
