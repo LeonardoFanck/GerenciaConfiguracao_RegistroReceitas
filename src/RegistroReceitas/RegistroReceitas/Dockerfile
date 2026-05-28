@@ -4,7 +4,7 @@ WORKDIR /src
 
 COPY . .
 
-RUN dotnet publish -c Release -o /app/publish
+RUN dotnet publish "src/RegistroReceitas/RegistroReceitas/RegistroReceitas.csproj" -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
 
