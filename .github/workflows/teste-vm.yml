@@ -9,9 +9,9 @@ jobs:
 
   teste-vm:
 
-    runs-on: ubuntu-latest
-    
     environment: homologacao
+
+    runs-on: ubuntu-latest
 
     steps:
 
