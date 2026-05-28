@@ -1,0 +1,28 @@
+name: Teste VM
+
+on:
+  push:
+    branches:
+      - homologacao
+
+jobs:
+
+  teste-vm:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Configurar SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Adicionar known_hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Testar conexão
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo CONEXAO_OK"
