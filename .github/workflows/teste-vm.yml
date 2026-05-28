@@ -10,6 +10,8 @@ jobs:
   teste-vm:
 
     runs-on: ubuntu-latest
+    
+    environment: homologacao
 
     steps:
 
