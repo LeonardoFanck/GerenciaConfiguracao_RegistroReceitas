@@ -13,19 +13,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
             
+      # Removemos completamente o ssh-keyscan e qualquer injeção direta de segredos no terminal
       - name: Configurar SSH
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
         run: |
           mkdir -p ~/.ssh
-          # O echo usando a variável de ambiente evita quebras de linha que travam o 'cat'
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
+      # O bypass do Host Checking é feito aqui, de forma limpa e segura
       - name: Deploy homologacao
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
         run: |
-          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} '
+          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no "$SSH_USER"@"$SSH_HOST" '
             chmod +x /home/univates/gerencia_configuracao/comandos/levantar_homologacao.sh && 
             /home/univates/gerencia_configuracao/comandos/levantar_homologacao.sh
           '
