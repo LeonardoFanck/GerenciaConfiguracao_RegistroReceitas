@@ -1,30 +1,60 @@
-name: Teste VM
+name: Deploy
 
 on:
   push:
     branches:
       - homologacao
+      - producao
 
 jobs:
 
-  teste-vm:
-
-    environment: homologacao
+  deploy-homologacao:
+    if: github.ref == 'refs/heads/homologacao'
 
     runs-on: ubuntu-latest
 
-    steps:
+    environment: homologacao
 
+    steps:
+      - uses: actions/checkout@v4
+      
       - name: Configurar SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
 
-      - name: Adicionar known_hosts
-        run: |
-          ping -c 4 ${{ secrets.SSH_HOST }}
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Testar conexão
+      - name: Deploy homologacao
+        run: | 
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} '
+            chmod +x /home/univates/gerencia_configuracao/comandos/levantar_homologacao.sh && 
+            /home/univates/gerencia_configuracao/comandos/levantar_homologacao.sh
+          '
+
+  deploy-producao:
+    if: github.ref == 'refs/heads/producao'
+
+    runs-on: ubuntu-latest
+
+    environment: producao
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Configurar SSH
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo CONEXAO_OK"
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy producao
+        run: | 
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} '
+            chmod +x /home/univates/gerencia_configuracao/comandos/levantar_producao.sh && 
+            /home/univates/gerencia_configuracao/comandos/levantar_producao.sh
+          '
+      
