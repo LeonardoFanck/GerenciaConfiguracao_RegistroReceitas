@@ -1,5 +1,4 @@
 name: Deploy
-
 on:
   push:
     branches:
@@ -7,53 +6,26 @@ on:
       - producao
 
 jobs:
-
   deploy-homologacao:
     if: github.ref == 'refs/heads/homologacao'
     runs-on: ubuntu-latest
     environment: homologacao
-
     steps:
       - uses: actions/checkout@v4
-
+            
       - name: Configurar SSH
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
         run: |
           mkdir -p ~/.ssh
+          # O echo usando a variável de ambiente evita quebras de linha que travam o 'cat'
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy homologacao
-        run: | 
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} '
+        run: |
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} '
             chmod +x /home/univates/gerencia_configuracao/comandos/levantar_homologacao.sh && 
             /home/univates/gerencia_configuracao/comandos/levantar_homologacao.sh
           '
-
-  deploy-producao:
-    if: github.ref == 'refs/heads/producao'
-
-    runs-on: ubuntu-latest
-
-    environment: producao
-
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Configurar SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-
-      - name: Deploy producao
-        run: | 
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} '
-            chmod +x /home/univates/gerencia_configuracao/comandos/levantar_producao.sh && 
-            /home/univates/gerencia_configuracao/comandos/levantar_producao.sh
-          '
-      
