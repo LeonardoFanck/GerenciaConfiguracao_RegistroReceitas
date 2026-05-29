@@ -12,6 +12,20 @@ jobs:
     environment: homologacao
     steps:
       - uses: actions/checkout@v4
+
+      - name: Debug SSH connection
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          # Verifica se a porta está acessível
+          nc -zv "$SSH_HOST" 22 || echo "PORTA 22 INACESSÍVEL"
+          
+          # Verbose SSH para ver onde falha
+          ssh -vvv -i ~/.ssh/id_ed25519 \
+              -o StrictHostKeyChecking=no \
+              -o ConnectTimeout=10 \
+              "$SSH_USER"@"$SSH_HOST" 'echo OK' 2>&1 | head -60
             
       # Removemos completamente o ssh-keyscan e qualquer injeção direta de segredos no terminal
       - name: Configurar SSH
