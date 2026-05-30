@@ -1,4 +1,4 @@
-name: Test SSH Raw
+name: Test SSH Banner
 
 on:
   workflow_dispatch:
@@ -8,9 +8,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Test SSH
+      - name: Read SSH banner
         run: |
-          ssh -vvv \
-            -o StrictHostKeyChecking=no \
-            -o PreferredAuthentications=none \
-            univates@177.44.248.36
+          timeout 10 bash -c 'cat < /dev/null > /dev/tcp/177.44.248.36/22'
