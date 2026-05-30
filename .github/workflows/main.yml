@@ -1,14 +1,7 @@
-name: Test SSH
-
-on:
-  push:
-    branches:
-      - homologacao
-      - producao
-
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment: homologacao
 
     steps:
       - name: SSH Test
