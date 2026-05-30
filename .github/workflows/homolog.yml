@@ -1,10 +1,6 @@
 name: Homologação Pipeline
 
 on:
-  push:
-    branches:
-      - homologacao
-
   pull_request:
     branches:
       - homologacao

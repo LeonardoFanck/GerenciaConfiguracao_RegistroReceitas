@@ -8,7 +8,7 @@ namespace RegistroReceitas.Controllers;
 public class AutenticacaoController(RegistroReceitasContext context) : Controller
 {
     private readonly RegistroReceitasContext _context = context;
-
+    //teste commit
     [HttpGet]
     public IActionResult Login() => View();
 

@@ -1,0 +1,24 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - homologacao
+      - producao
+
+jobs:
+  deploy-homologacao:
+    if: github.ref == 'refs/heads/homologacao'
+    runs-on: ubuntu-latest
+    environment: homologacao
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy Homologacao
+        uses: appleboy/ssh-action@v1.2.5
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          use_insecure_cipher: true
+          script: |
+            bash /home/univates/gerencia_configuracao/comandos/levantar_homologacao.sh

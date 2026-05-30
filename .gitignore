@@ -480,3 +480,12 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Ignorar todos os appSettings
+appsettings.json
+appsettings.*.json
+/src/RegistroReceitas/RegistroReceitas/appsettings.json
+/src/RegistroReceitas/RegistroReceitas/appsettings.*.json
+/src/RegistroReceitas/RegistroReceitas/appsettings.Development.json
+/src/RegistroReceitas/RegistroReceitas/appsettings.Homolog.json
+/src/RegistroReceitas/RegistroReceitas/appsettings.Production.json
