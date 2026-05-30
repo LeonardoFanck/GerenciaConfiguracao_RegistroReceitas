@@ -8,6 +8,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Read SSH banner
+      - name: Read SSH Banner
         run: |
-          timeout 10 bash -c 'cat < /dev/null > /dev/tcp/177.44.248.36/22'
+          timeout 10 bash -c 'exec 3<>/dev/tcp/177.44.248.36/22; cat <&3'
