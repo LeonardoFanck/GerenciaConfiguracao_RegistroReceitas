@@ -1,4 +1,4 @@
-name: Debug SSH Key
+name: Debug SSH
 
 on:
   workflow_dispatch:
@@ -18,17 +18,17 @@ jobs:
 
       - name: Verificar chave
         run: |
-          echo "=== PRIMEIRA LINHA ==="
+          echo "PRIMEIRA LINHA:"
           head -n 1 key
 
-          echo "=== ULTIMA LINHA ==="
+          echo "ULTIMA LINHA:"
           tail -n 1 key
 
-          echo "=== TAMANHO ==="
-          wc -c key
-
-          echo "=== TIPO ==="
+          echo "TIPO:"
           file key
+
+          echo "TAMANHO:"
+          wc -c key
 
       - name: Testar SSH
         run: |
