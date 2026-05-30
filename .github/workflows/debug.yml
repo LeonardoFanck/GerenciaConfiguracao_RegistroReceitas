@@ -1,4 +1,4 @@
-name: Debug SSH
+name: Debug SSH Key
 
 on:
   workflow_dispatch:
@@ -15,6 +15,20 @@ jobs:
           ${{ secrets.SSH_KEY }}
           EOF
           chmod 600 key
+
+      - name: Verificar chave
+        run: |
+          echo "=== PRIMEIRA LINHA ==="
+          head -n 1 key
+
+          echo "=== ULTIMA LINHA ==="
+          tail -n 1 key
+
+          echo "=== TAMANHO ==="
+          wc -c key
+
+          echo "=== TIPO ==="
+          file key
 
       - name: Testar SSH
         run: |
