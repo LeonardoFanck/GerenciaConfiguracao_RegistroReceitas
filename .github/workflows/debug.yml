@@ -1,4 +1,4 @@
-name: Debug SSH
+name: Test SSH Raw
 
 on:
   workflow_dispatch:
@@ -6,34 +6,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    environment: homologacao
 
     steps:
-      - name: Criar chave
-        run: |
-          cat > key << 'EOF'
-          ${{ secrets.SSH_KEY }}
-          EOF
-          chmod 600 key
-
-      - name: Verificar chave
-        run: |
-          echo "PRIMEIRA LINHA:"
-          head -n 1 key
-
-          echo "ULTIMA LINHA:"
-          tail -n 1 key
-
-          echo "TIPO:"
-          file key
-
-          echo "TAMANHO:"
-          wc -c key
-
-      - name: Testar SSH
+      - name: Test SSH
         run: |
           ssh -vvv \
-            -i key \
             -o StrictHostKeyChecking=no \
-            univates@177.44.248.36 \
-            "whoami"
+            -o PreferredAuthentications=none \
+            univates@177.44.248.36
