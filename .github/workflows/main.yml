@@ -4,22 +4,11 @@ on:
   push:
     branches:
       - homologacao
-
 jobs:
   test:
     runs-on: ubuntu-latest
-    environment: homologacao
 
     steps:
-      - name: SSH Test
-        uses: appleboy/ssh-action@v1.2.5
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          use_insecure_cipher: true
-          script: |
-            echo "Conectado!"
-            whoami
-            hostname
-            pwd
+      - name: Test TCP
+        run: |
+          nc -vz 177.44.248.36 22
