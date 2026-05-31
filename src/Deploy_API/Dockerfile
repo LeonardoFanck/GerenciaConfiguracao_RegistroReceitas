@@ -20,4 +20,4 @@ EXPOSE 3000
 ENV NODE_ENV=homologacao
 
 # Comando de execução
-CMD ["node", "server.js"]
+CMD ["node", "deploy.js"]
