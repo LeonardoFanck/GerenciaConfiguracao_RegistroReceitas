@@ -10,7 +10,15 @@ const DEPLOY_SERVICE_URL =
 app.post("/deploy", async (req, res) => {
     try {
         // 🔐 segurança simples (GitHub secret)
+        console.log("Headers:", req.headers);
+
         const secret = req.headers["x-secret"];
+    
+        console.log("Recebido:", secret);
+        console.log("Esperado:", process.env.DEPLOY_SECRET);
+
+        console.log("São iguais? -> ", secret !== process.env.DEPLOY_SECRET);
+
         if (!secret || secret !== process.env.DEPLOY_SECRET) {
             return res.status(403).send("Forbidden");
         }
