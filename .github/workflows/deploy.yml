@@ -12,17 +12,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Testar SSH manual
+      - name: Deploy Homologação
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-      
-          ssh -vvv \
-            -o StrictHostKeyChecking=no \
-            -i ~/.ssh/id_ed25519 \
-            univates@${{ secrets.SERVER_HOST }} \
-            "echo conectado"
+          curl -X POST \
+            -H "x-secret: ${{ secrets.DEPLOY_SECRET }}" \
+            http://177.44.248.36:9000/hooks/deploy-hml
     
 #      - name: Descobrir IP do runner
 #        run: |
