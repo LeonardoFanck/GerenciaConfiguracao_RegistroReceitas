@@ -12,6 +12,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Descobrir IP do runner
+        run: |
+          curl https://api.ipify.org
+    
       - name: Executar script remoto
         uses: appleboy/ssh-action@v1.2.0
         with:
