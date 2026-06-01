@@ -1,0 +1,12 @@
+{
+  "name": "deploy-api",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "deploy.js",
+  "scripts": {
+    "start": "node deploy.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
