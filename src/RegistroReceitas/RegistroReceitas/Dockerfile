@@ -29,7 +29,7 @@ WORKDIR "/src/src/RegistroReceitas/RegistroReceitas"
 RUN dotnet publish "RegistroReceitas.csproj" \
     -c Release \
     -o /app/publish \
-    --no-restore
+#    --no-restore
 
 # =========================================
 # RUNTIME
