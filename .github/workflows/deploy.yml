@@ -18,6 +18,27 @@ jobs:
             -H "x-secret: ${{ secrets.DEPLOY_SECRET }}" \
             http://177.44.248.36:9000/hooks/deploy-hml
 
+      - name: Status Homologação
+        run: |
+          for i in {1..60}
+          do
+            STATUS=$(curl -s \
+              -H "x-secret: ${{ secrets.DEPLOY_SECRET }}" \
+              http://177.44.248.36:9000/hooks/status-hml)
+      
+            echo "Status: $STATUS"
+      
+            if [ "$STATUS" = "ONLINE" ]; then
+              echo "Deploy concluído!"
+              exit 0
+            fi
+      
+            sleep 10
+          done
+      
+          echo "Timeout aguardando aplicação"
+          exit 1
+
   deploy-producao:
     if: github.ref == 'refs/heads/producao'
     runs-on: ubuntu-latest
