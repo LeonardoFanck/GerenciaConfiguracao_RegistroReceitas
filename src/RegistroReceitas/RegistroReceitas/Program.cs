@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.DependencyInjection;
 using RegistroReceitas.Data;
 using RegistroReceitas.Services;
+using Microsoft.AspNetCore.DataProtection;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<RegistroReceitasContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("RegistroReceitasContext") ?? throw new InvalidOperationException("Connection string 'RegistroReceitasContext' not found.")));
@@ -9,21 +11,34 @@ builder.Services.AddDbContext<RegistroReceitasContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
+//builder.Services.AddSession(options =>
+//{
+//    options.IdleTimeout = TimeSpan.FromMinutes(30);
+//    options.Cookie.HttpOnly = true;
+//    options.Cookie.IsEssential = true;
+//});
 
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPdfService, PdfService>();
 
 QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+{
+    options.LoginPath = "/Autenticacao/Login";
+    options.LogoutPath = "/Autenticacao/Logout";
+
+    options.ExpireTimeSpan = TimeSpan.FromDays(7);
+
+    options.SlidingExpiration = true;
+});
+
+builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo("/keys"));
+
 var app = builder.Build();
 
-app.UseSession();
+//app.UseSession();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -36,6 +51,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

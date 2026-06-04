@@ -9,7 +9,8 @@ namespace RegistroReceitas.Controllers
     {
         public IActionResult Index()
         {
-            if(HttpContext.Session.EstaLogado())
+            //if(HttpContext.Session.EstaLogado())
+            if(User.EstaLogado())
                 return RedirectToAction("Index", "Receitas");
 
             return View();

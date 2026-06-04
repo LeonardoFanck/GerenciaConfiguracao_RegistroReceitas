@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RegistroReceitas.Data;
 using RegistroReceitas.ViewModel;
+using System.Security.Claims;
 
 namespace RegistroReceitas.Controllers;
 
@@ -27,7 +30,7 @@ public class AutenticacaoController(RegistroReceitasContext context) : Controlle
             return View(model);
         }
 
-        if(!string.Equals(model.Senha, usuario.Senha, StringComparison.Ordinal))
+        if (!string.Equals(model.Senha, usuario.Senha, StringComparison.Ordinal))
         {
             ModelState.AddModelError(string.Empty, "Login ou senha inválidos.");
             return View(model);
@@ -40,16 +43,33 @@ public class AutenticacaoController(RegistroReceitasContext context) : Controlle
         }
 
         // Salva na session
-        HttpContext.Session.SetString("UsuarioId", usuario.Id.ToString());
-        HttpContext.Session.SetString("UsuarioNome", usuario.Nome);
+        //HttpContext.Session.SetString("UsuarioId", usuario.Id.ToString());
+        //HttpContext.Session.SetString("UsuarioNome", usuario.Nome);
+        var claims = new List<Claim>
+        {
+            new (ClaimTypes.NameIdentifier, usuario.Id.ToString()),
+            new (ClaimTypes.Name, usuario.Nome)
+        };
+
+        var identity = new ClaimsIdentity(
+            claims,
+            CookieAuthenticationDefaults.AuthenticationScheme);
+
+        var principal = new ClaimsPrincipal(identity);
+
+        await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            principal);
 
         return RedirectToAction("Index", "Receitas");
     }
 
     [HttpGet]
-    public IActionResult Logout()
+    public async Task<IActionResult> Logout()
     {
-        HttpContext.Session.Clear();
+        //HttpContext.Session.Clear();
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
 
         return RedirectToAction("Index", "Home");
     }
