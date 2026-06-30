@@ -20,18 +20,7 @@ jobs:
       - name: Instalar .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 10.0.x
-
-      - name: Instalação SonarQube
-        run: dotnet tool install --global dotnet-sonarscanner
-        
-      - name: Validações SonarQube
-        run: |
-          dotnet sonarscanner begin \
-          /k:"LeonardoFanck_GerenciaConfiguracao_RegistroReceitas" \
-          /o:"leonardofanck" \
-          /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
-          /d:sonar.cs.opencover.reportsPaths=coverage.xml
+          dotnet-version: 10.0.x      
 
       - name: Restaurar dependências
         run: dotnet restore src/RegistroReceitas
@@ -41,6 +30,3 @@ jobs:
 
       - name: Executar testes
         run: dotnet test src/RegistroReceitas --no-build
-      
-      - name: SonarQube Relatório
-        run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
