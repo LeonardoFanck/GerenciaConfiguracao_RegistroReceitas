@@ -12,6 +12,7 @@ public static class UsuarioHelper
 
     public static Guid GetUsuarioId(this ClaimsPrincipal user)
     {
+        int i = 10;
         var id = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         return Guid.TryParse(id, out var guid)
