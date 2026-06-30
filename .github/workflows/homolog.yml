@@ -6,14 +6,11 @@ on:
       - homologacao
 
 jobs:
-
   build-test:
-    name: Build e Testes Homolog
-    
+    name: Build, Testes e Sonar
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout código
         uses: actions/checkout@v4
 
@@ -22,25 +19,55 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      - name: Instalação SonarQube
+      - name: Instalar SonarScanner
         run: dotnet tool install --global dotnet-sonarscanner
-        
-      - name: Validações SonarQube
+
+      - name: Iniciar análise SonarCloud
         run: |
           dotnet sonarscanner begin \
-          /k:"LeonardoFanck_GerenciaConfiguracao_RegistroReceitas" \
-          /o:"leonardofanck" \
-          /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
-          /d:sonar.cs.opencover.reportsPaths=coverage.xml
+            /k:"LeonardoFanck_GerenciaConfiguracao_RegistroReceitas" \
+            /o:"leonardofanck" \
+            /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
       - name: Restaurar dependências
         run: dotnet restore src/RegistroReceitas
 
-      - name: Build projeto
+      - name: Build
         run: dotnet build src/RegistroReceitas --no-restore
 
       - name: Executar testes
         run: dotnet test src/RegistroReceitas --no-build
-      
-      - name: SonarQube Relatório
+
+      - name: Finalizar análise SonarCloud
         run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+
+      - name: Aguardar processamento da análise
+        run: sleep 20
+
+      - name: Validar resultados do SonarCloud
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          response=$(curl -s -u "${SONAR_TOKEN}:" \
+          "https://sonarcloud.io/api/measures/component?component=LeonardoFanck_GerenciaConfiguracao_RegistroReceitas&metricKeys=bugs,vulnerabilities,code_smells")
+
+          echo "$response"
+
+          BUGS=$(echo "$response" | jq -r '.component.measures[] | select(.metric=="bugs") | .value')
+          VULN=$(echo "$response" | jq -r '.component.measures[] | select(.metric=="vulnerabilities") | .value')
+          SMELLS=$(echo "$response" | jq -r '.component.measures[] | select(.metric=="code_smells") | .value')
+
+          BUGS=${BUGS:-0}
+          VULN=${VULN:-0}
+          SMELLS=${SMELLS:-0}
+
+          echo "Bugs: $BUGS"
+          echo "Vulnerabilities: $VULN"
+          echo "Code Smells: $SMELLS"
+
+          if [ "$BUGS" -gt 0 ] || [ "$VULN" -gt 0 ] || [ "$SMELLS" -gt 0 ]; then
+            echo "❌ Validação SonarCloud falhou!"
+            exit 1
+          fi
+
+          echo "✅ Nenhum problema encontrado."
