@@ -1,10 +1,10 @@
 name: Deploy
 on:
-  workflow_dispatch
-  #push:
-  #  branches:
-  #    - homologacao
-  #    - producao
+  #workflow_dispatch
+  push:
+    branches:
+      - homologacao
+      - producao
 
 jobs:
   deploy-homologacao:
@@ -12,11 +12,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Executar script remoto
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
-            /home/univates/gerencia_configuracao/comandos/levantar_homologacao.sh
+      - name: Deploy Homologação
+        run: |
+          curl -X POST \
+            -H "x-secret: ${{ secrets.DEPLOY_SECRET }}" \
+            http://177.44.248.36:9000/hooks/deploy-hml
+
+      - name: Status Homologação
+        run: |
+          for i in {1..60}
+          do
+            STATUS=$(curl -s \
+              -H "x-secret: ${{ secrets.DEPLOY_SECRET }}" \
+              http://177.44.248.36:9000/hooks/status-hml)
+      
+            echo "Status: $STATUS"
+      
+            if [ "$STATUS" = "ONLINE" ]; then
+              echo "Deploy concluído!"
+              exit 0
+            fi
+      
+            sleep 10
+          done
+      
+          echo "Timeout aguardando aplicação"
+          exit 1
+
+  deploy-producao:
+    if: github.ref == 'refs/heads/producao'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy Produção
+        run: |
+          curl -X POST \
+            -H "x-secret: ${{ secrets.DEPLOY_SECRET }}" \
+            http://177.44.248.36:9000/hooks/deploy-prod

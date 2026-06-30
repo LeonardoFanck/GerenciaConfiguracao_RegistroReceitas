@@ -81,7 +81,8 @@ public class ReceitasController(RegistroReceitasContext context, IEmailService e
 
     private async Task EnviarEmailNotificacao(Receita receita)
     {
-        var user = await _context.Usuario.FirstAsync(x => x.Id == HttpContext.Session.GetUsuarioId());
+        //var user = await _context.Usuario.FirstAsync(x => x.Id == HttpContext.Session.GetUsuarioId());
+        var user = await _context.Usuario.FirstAsync(x => x.Id == User.GetUsuarioId());
         var subject = "Nova Receita Criada";
         var message = $"A receita '{receita.Nome}' foi criada com sucesso.";
         await _emailService.SendAsync(user.Email, subject, message);

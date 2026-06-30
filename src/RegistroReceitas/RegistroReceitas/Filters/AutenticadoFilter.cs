@@ -8,7 +8,8 @@ public class AutenticadoFilter : ActionFilterAttribute
 {
     public override void OnActionExecuting(ActionExecutingContext context)
     {
-        var logado = context.HttpContext.Session.EstaLogado();
+        //var logado = context.HttpContext.Session.EstaLogado();
+        var logado = context.HttpContext.User.EstaLogado();
 
         if (!logado)
         {

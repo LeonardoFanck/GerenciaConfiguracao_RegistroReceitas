@@ -20,7 +20,7 @@ jobs:
       - name: Instalar .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 10.0.x
+          dotnet-version: 10.0.x      
 
       - name: Restaurar dependências
         run: dotnet restore src/RegistroReceitas
