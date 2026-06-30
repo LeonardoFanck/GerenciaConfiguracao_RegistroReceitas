@@ -13,9 +13,7 @@ namespace RegistroReceitas.Controllers
             if(User.EstaLogado())
                 return RedirectToAction("Index", "Receitas");
 
-            if(true){
-
-            }
+            int x = 10;
 
             return View();
         }
