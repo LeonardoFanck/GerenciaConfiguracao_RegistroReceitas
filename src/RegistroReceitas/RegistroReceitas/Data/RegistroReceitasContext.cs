@@ -7,6 +7,7 @@ namespace RegistroReceitas.Data
     {
         public DbSet<Receita> Receita { get; set; } = default!;
         public DbSet<Usuario> Usuario { get; set; } = default!;
+        public DbSet<Teste> Teste { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
