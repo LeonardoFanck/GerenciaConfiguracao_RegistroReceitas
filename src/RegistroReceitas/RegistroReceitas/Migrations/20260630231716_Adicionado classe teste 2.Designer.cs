@@ -12,8 +12,8 @@ using RegistroReceitas.Data;
 namespace RegistroReceitas.Migrations
 {
     [DbContext(typeof(RegistroReceitasContext))]
-    [Migration("20260630230126_Adicionado classe teste")]
-    partial class Adicionadoclasseteste
+    [Migration("20260630231716_Adicionado classe teste 2")]
+    partial class Adicionadoclasseteste2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,6 +51,21 @@ namespace RegistroReceitas.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Receita");
+                });
+
+            modelBuilder.Entity("RegistroReceitas.Models.Teste", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Teste");
                 });
 
             modelBuilder.Entity("RegistroReceitas.Models.Usuario", b =>

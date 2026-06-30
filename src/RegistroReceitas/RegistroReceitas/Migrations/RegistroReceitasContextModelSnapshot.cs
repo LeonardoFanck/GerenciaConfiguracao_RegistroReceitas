@@ -50,6 +50,21 @@ namespace RegistroReceitas.Migrations
                     b.ToTable("Receita");
                 });
 
+            modelBuilder.Entity("RegistroReceitas.Models.Teste", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Teste");
+                });
+
             modelBuilder.Entity("RegistroReceitas.Models.Usuario", b =>
                 {
                     b.Property<Guid>("Id")
