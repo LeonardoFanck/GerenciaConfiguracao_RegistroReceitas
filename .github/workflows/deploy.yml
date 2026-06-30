@@ -42,8 +42,7 @@ jobs:
   deploy-producao:
     if: github.ref == 'refs/heads/producao'
     runs-on: ubuntu-latest
-
-	steps:
+    steps:
       - name: Deploy Produção
         run: |
           curl -X POST \
