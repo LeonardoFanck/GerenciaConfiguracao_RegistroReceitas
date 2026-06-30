@@ -1,9 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace RegistroReceitas.Models;
-
-public class Teste
+﻿namespace RegistroReceitas.Models
 {
-    public Guid Id { get; set; }
-    public string Nome { get; set; } = string.Empty;
+    public class Teste
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+    }
 }
