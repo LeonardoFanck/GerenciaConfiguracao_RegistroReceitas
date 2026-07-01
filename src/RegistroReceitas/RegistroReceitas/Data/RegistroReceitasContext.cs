@@ -8,11 +8,12 @@ namespace RegistroReceitas.Data
         public DbSet<Receita> Receita { get; set; } = default!;
         public DbSet<Usuario> Usuario { get; set; } = default!;
         public DbSet<Teste> Teste { get; set; } = default!;
+        public DbSet<Categoria> Categoria { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
+            int i = 0;
             modelBuilder.Entity<Usuario>().HasData(
                 new Usuario()
                 {
