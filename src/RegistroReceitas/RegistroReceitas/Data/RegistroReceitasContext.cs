@@ -12,7 +12,7 @@ namespace RegistroReceitas.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            
             modelBuilder.Entity<Usuario>().HasData(
                 new Usuario()
                 {
